@@ -130,20 +130,17 @@ class  GUI_Work_time(Tk):
         self.time_minutes_in_park.set('56')
     def create_frame_lunch_time(self):
         frame_in_label_three = Frame(self.main_label)
-        frame_in_label_three.pack(side=LEFT)
-        Label(frame_in_label_three, text='Обед', font=self.FONT, bg='lightgreen').pack()
+        frame_in_label_three.pack(side=LEFT,padx=10)
+        Label(frame_in_label_three, text='Обед', font=self.FONT, bg='lightblue').pack()
 
         frame_hour_in_park = Frame(frame_in_label_three)
         frame_hour_in_park.pack()
-        time_hour_in_park_label = TimeLabel(frame_hour_in_park, textvariable=self.time_hour_in_park,
+        time_hour_lunch_label = TimeLabel(frame_hour_in_park, textvariable=self.time_lanch_hour,
                                             bg='lightblue', font=self.FONT)
-        time_hour_in_park_label.pack(side=LEFT)
-        TimeLabel(frame_hour_in_park, text=':', font=self.FONT, bg='lightblue').pack(side=LEFT)
-        time_minutes_outpark_label = TimeLabel(frame_hour_in_park, textvariable=self.time_minutes_in_park,
-                                               bg='lightblue', font=self.FONT)
-        time_minutes_outpark_label.pack(side=LEFT)
-        self.time_hour_in_park.set('14')
-        self.time_minutes_in_park.set('56')
+        time_hour_lunch_label.pack(side=LEFT)
+
+        self.time_lanch_hour.set('14 мин')
+
 
 
 
@@ -155,12 +152,15 @@ class  GUI_Work_time(Tk):
 
     def main_func(self,event):
         if str(event.widget) == '.!frame.!frame3.100' and self.num_smena.get() == 1:
-            print('OK')
-            self.num_card['values'] = card.dct_num_card[self.bus_rout.get()] # получаем список карточек выбранного маршрута
-            self.num_card.set(1)
+            self.num_card['values'] = card.dct_num_card[self.bus_rout.get()]  # получаем список карточек выбранного маршрута
+            route_card_key = (self.bus_rout.get(),self.num_card.get())
+            GET_HOUR_ROUT = str(card.dct_work_cards_I[route_card_key][0])
+            GET_MIN_ROUT = str(card.dct_work_cards_I[route_card_key][1])
+            self.time_hour_out_park.set(GET_HOUR_ROUT)
+            self.time_minutes_out_park.set(GET_MIN_ROUT)
 
-            # self.time_out_park.set(str(card.dct_work_cards_I[self.bus_rout.get()][self.num_card.get()][0])+":"+
-            # str(card.dct_work_cards_I[self.bus_rout.get()][self.num_card.get()][1]))
+
+
 
 
         elif str(event.widget) == '.!frame.!frame4.101':
