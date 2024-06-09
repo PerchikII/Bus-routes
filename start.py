@@ -8,6 +8,11 @@ MONTH_DATA = datatime.time_month
 # BUS_ROUTE = card.list_card[0]
 # ROUTE_CARD = card.dct_num_card[card.list_card[0]][0]
 
+class TimeLabel(Label):
+    def __init__(self,parent,font,**kwargs):
+        super().__init__(parent,font=font,relief=RAISED,**kwargs)
+
+
 class  GUI_Work_time(Tk):
     def __init__(self):
         super().__init__()
@@ -15,7 +20,8 @@ class  GUI_Work_time(Tk):
         FONT_2 = font.Font(family="Verdana", size=20, weight="bold", slant="roman")
         self.num_smena = IntVar()
         self.marsh_var = StringVar()
-        self.time_out_park = StringVar()
+        self.time_hour_out_park = StringVar()
+        self.time_minutes_out_park = StringVar()
         self.time_end_work = StringVar()
         self.total_hour_var = StringVar()
         self.total_minutes_var = StringVar()
@@ -53,7 +59,7 @@ class  GUI_Work_time(Tk):
 
         radio_I_sm = Radiobutton(root_frame,text='I смена',variable=self.num_smena,value=1)
         radio_I_sm.pack(side=LEFT,padx=5,pady=10)
-        radio_II_sm = Radiobutton(root_frame,text='II смена',variable=self.num_smena,value=0)
+        radio_II_sm = Radiobutton(root_frame,text='II смена',variable=self.num_smena,value=2)
         radio_II_sm.pack(side=LEFT,padx=5,pady=10)
         self.num_smena.set(1)
 
@@ -64,17 +70,25 @@ class  GUI_Work_time(Tk):
         frame_in_label_one.pack(side=LEFT,anchor=N)
         Label(frame_in_label_one,text='Время выезда',font=FONT, bg='lightblue').pack(padx=5)
 
-        info_marsh_label = Label(frame_in_label_one,textvariable=self.marsh_var,bg='lightblue',font=FONT)
-        info_marsh_label.pack()
-        self.marsh_var.set('test 63-65')
+        frame_hour_out_park = Frame(frame_in_label_one)
+        frame_hour_out_park.pack()
+        time_hour_outpark_label = TimeLabel(frame_hour_out_park,
+                                            textvariable=self.time_hour_out_park,bg='lightblue',font=FONT)
+        time_hour_outpark_label.pack(side=LEFT)
+        TimeLabel(frame_hour_out_park,text=':',font=FONT,bg='lightblue').pack(side=LEFT)
+        time_minutes_outpark_label = TimeLabel(frame_hour_out_park,
+                                               textvariable=self.time_minutes_out_park,bg='lightblue',font=FONT)
+        time_minutes_outpark_label.pack(side=LEFT)
+        self.time_hour_out_park.set('05')
+        self.time_minutes_out_park.set('43')
 
         frame_in_label_two = Frame(main_label)
         frame_in_label_two.pack(side=LEFT, anchor=N)
         Label(frame_in_label_two, text='Конец работы',font=FONT, bg='lightblue').pack()
 
-        info_time_label = Label(frame_in_label_two, textvariable=self.time_out_park,font=FONT, bg='lightblue')
+        info_time_label = Label(frame_in_label_two, textvariable=self.time_end_work,font=FONT, bg='lightblue')
         info_time_label.pack()
-        self.time_out_park.set('test 69-71')
+        # self.time_out_park.set('test 69-71')
 
         frame_in_label_three = Frame(main_label)
         frame_in_label_three.pack(side=LEFT)
@@ -105,11 +119,16 @@ class  GUI_Work_time(Tk):
 
 
     def main_func(self,event):
-
-        if str(event.widget) == '.!frame.!frame3.100':
-            print(event.widget)
+        if str(event.widget) == '.!frame.!frame3.100' and self.num_smena.get() == 1:
+            print('OK')
             self.num_card['values'] = card.dct_num_card[self.bus_rout.get()] # получаем список карточек выбранного маршрута
             self.num_card.set(1)
+            self.time_out_park.set(str(card.dct_work_cards_I[self.bus_rout.get()][self.num_card.get()][0])+":"+
+            str(card.dct_work_cards_I[self.bus_rout.get()][self.num_card.get()][1]))
+
+
+        elif str(event.widget) == '.!frame.!frame4.101':
+            print('Карта')
 
 
 
