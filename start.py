@@ -1,10 +1,11 @@
 from tkinter import *
-import dates_time as datatime
 from tkinter import ttk
-import working_days_card as card
 from tkinter import font
-DAY_DATA = datatime.time_day
-MONTH_DATA = datatime.time_month
+import dates_time as data
+import working_days_card as card
+
+DAY_DATA = data.time_day
+MONTH_DATA = data.time_month
 # BUS_ROUTE = card.list_card[0]
 # ROUTE_CARD = card.dct_num_card[card.list_card[0]][0]
 
@@ -47,7 +48,7 @@ class  GUI_Work_time(Tk):
         frame_month = Frame(root_frame)
         frame_month.pack(side=LEFT, anchor=N)
         Label(frame_month, text='Месяц').pack()
-        self.month_date = ttk.Combobox(frame_month,values=datatime.month_lst,width=10)
+        self.month_date = ttk.Combobox(frame_month, values=data.month_lst, width=10)
         self.month_date.pack()
         self.month_date.set(MONTH_DATA)
 
@@ -86,7 +87,7 @@ class  GUI_Work_time(Tk):
         frame_total_time_in_time_label.pack()
         self.total_hour_Label = Label(frame_total_time_in_time_label,font=self.FONT_2,textvariable=self.total_hour_var)
         self.total_hour_Label.pack(side=LEFT)
-        self.total_hour_var.set('15')
+        self.total_hour_var.set('00')
         Label(frame_total_time_in_time_label,text=':',font=self.FONT_2).pack(side=LEFT)
         self.total_minutes_Label = Label(frame_total_time_in_time_label,font=self.FONT_2,textvariable=self.total_minutes_var)
         self.total_minutes_Label.pack(side=LEFT)
@@ -109,8 +110,8 @@ class  GUI_Work_time(Tk):
         time_minutes_outpark_label = TimeLabel(frame_hour_out_park,
                                                textvariable=self.time_minutes_out_park, bg='lightblue', font=self.FONT)
         time_minutes_outpark_label.pack(side=LEFT)
-        self.time_hour_out_park.set('05')
-        self.time_minutes_out_park.set('43')
+        self.time_hour_out_park.set('00')
+        self.time_minutes_out_park.set('00')
 
     def create_frame_hour_in_park(self):
         frame_in_label_two = Frame(self.main_label)
@@ -126,8 +127,8 @@ class  GUI_Work_time(Tk):
         time_minutes_outpark_label = TimeLabel(frame_hour_in_park,textvariable=self.time_minutes_in_park,
                                                 bg='lightblue', font=self.FONT)
         time_minutes_outpark_label.pack(side=LEFT)
-        self.time_hour_in_park.set('14')
-        self.time_minutes_in_park.set('56')
+        self.time_hour_in_park.set('00')
+        self.time_minutes_in_park.set('00')
     def create_frame_lunch_time(self):
         frame_in_label_three = Frame(self.main_label)
         frame_in_label_three.pack(side=LEFT,padx=10)
@@ -139,7 +140,7 @@ class  GUI_Work_time(Tk):
                                             bg='lightblue', font=self.FONT)
         time_hour_lunch_label.pack(side=LEFT)
 
-        self.time_lanch_hour.set('14 мин')
+        self.time_lanch_hour.set('00 мин')
 
 
 
@@ -151,22 +152,42 @@ class  GUI_Work_time(Tk):
 
 
     def main_func(self,event):
+        karta = self.num_card.get()
         if str(event.widget) == '.!frame.!frame3.100' and self.num_smena.get() == 1:
-            self.num_card['values'] = card.dct_num_card[self.bus_rout.get()]  # получаем список карточек выбранного маршрута
-            route_card_key = (self.bus_rout.get(),self.num_card.get())
-            GET_HOUR_ROUT = str(card.dct_work_cards_I[route_card_key][0])
-            GET_MIN_ROUT = str(card.dct_work_cards_I[route_card_key][1])
-            self.time_hour_out_park.set(GET_HOUR_ROUT)
-            self.time_minutes_out_park.set(GET_MIN_ROUT)
+            self.Icm(karta)
+
+        elif str(event.widget) == '.!frame.!frame4.101'and self.num_smena.get() == 1:
+            self.Icm(karta)
+            print('Карта строка 160')
+
+
+    def Icm(self,karta):
+        self.num_card['values'] = card.dct_num_card[self.bus_rout.get()]  # получаем список карточек выбранного маршрута
+        if karta > '1':
+            route_card_key = (self.bus_rout.get(), karta)
+            GET_HOUR_ROUT_OUT_PARK = str(card.dct_work_cards_I[route_card_key][0])
+            GET_MIN_ROUT_OUT_PARK = str(card.dct_work_cards_I[route_card_key][1])
+            self.time_hour_out_park.set(GET_HOUR_ROUT_OUT_PARK)
+            self.time_minutes_out_park.set(GET_MIN_ROUT_OUT_PARK)
+            GET_HOUR_ROUT_IN_PARK = str(card.dct_work_cards_I[route_card_key][2])
+            GET_MIN_ROUT_IN_PARK = str(card.dct_work_cards_I[route_card_key][3])
+            self.time_hour_in_park.set(GET_HOUR_ROUT_IN_PARK)
+            self.time_minutes_in_park.set(GET_MIN_ROUT_IN_PARK)
+
+        else:
+            route_card_key = (self.bus_rout.get(), self.num_card.get())
+            GET_HOUR_ROUT_OUT_PARK = str(card.dct_work_cards_I[route_card_key][0])
+            GET_MIN_ROUT_OUT_PARK = str(card.dct_work_cards_I[route_card_key][1])
+            self.time_hour_out_park.set(GET_HOUR_ROUT_OUT_PARK)
+            self.time_minutes_out_park.set(GET_MIN_ROUT_OUT_PARK)
+            GET_HOUR_ROUT_IN_PARK = str(card.dct_work_cards_I[route_card_key][2])
+            GET_MIN_ROUT_IN_PARK = str(card.dct_work_cards_I[route_card_key][3])
+            self.time_hour_in_park.set(GET_HOUR_ROUT_IN_PARK)
+            self.time_minutes_in_park.set(GET_MIN_ROUT_IN_PARK)
 
 
 
-
-
-        elif str(event.widget) == '.!frame.!frame4.101':
-            print('Карта')
-
-
+    def get_time_of_route(self,karta=None):...
 
 
 
@@ -175,6 +196,7 @@ class  GUI_Work_time(Tk):
 
 if __name__ == '__main__':
     root = GUI_Work_time()
+
     root.geometry('500x500+1200+150')
     root.resizable(False,False)
     root.title('Учёт рабочего времени')
